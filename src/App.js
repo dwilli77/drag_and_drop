@@ -24,7 +24,7 @@ class App extends Component {
     if (this.state.toDo){
       this.setState({
         toDo: "",
-        items: [...this.state.items, this.state.toDo]
+        items: [...this.state.items, [this.state.toDo, false]]
       })
     } else {
       alert("enter a list item to add")
@@ -32,7 +32,6 @@ class App extends Component {
   }
 
   removeItem = index => {
-    console.log("value of index: " + index);
     this.setState({
       items: this.state.items.filter((item, j) => index !== j)
     });
@@ -46,16 +45,12 @@ class App extends Component {
 
   dragOver = (e, index) => {
     e.preventDefault();
-    
     const dragItem = this.state.items[index];
-    
     if(dragItem === this.el) {
       return;
     }
     let items = this.state.items.filter(item => item !== this.el);
-
     items.splice(index, 0, this.el);
-
     this.setState({
       items: items
     })
@@ -63,6 +58,14 @@ class App extends Component {
 
   dragEnd = e => {
     this.el = null;
+  }
+
+  toggleComplete = (e, index) => {
+    let items = this.state.items.slice();
+    items[index][1] = items[index][1] ? false : true;
+    this.setState({
+      items: items
+    });
   }
 
   render() {
@@ -73,7 +76,16 @@ class App extends Component {
         <div className="list-area">
           {this.state.items.map(item =>{
             let index = this.state.items.indexOf(item);
-            return <Card onDragEnd={this.dragEnd} onDragOver={this.dragOver} onDragStart={this.dragStart} key={index} index={index} content={item} onRemove={this.removeItem}/>
+
+            return <Card onDragEnd={this.dragEnd} 
+                          onDragOver={this.dragOver} 
+                          onDragStart={this.dragStart} 
+                          key={index} 
+                          index={index} 
+                          content={item[0]} 
+                          markedComplete={item[1]} 
+                          onRemove={this.removeItem} 
+                          onComplete={this.toggleComplete}/>
           })}
         </div>
       </Container>

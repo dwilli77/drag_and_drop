@@ -6,12 +6,8 @@ class Card extends React.Component {
     super(props);
     this.state = {
       index: props.index,
-      complete: false
+      complete: props.markedComplete
     }
-  }
-
-  toggleComplete = () => {
-    this.state.complete ? this.setState({complete: false}) : this.setState({complete: true})
   }
 
   render(){
@@ -22,12 +18,15 @@ class Card extends React.Component {
             onDragOver={e => this.props.onDragOver(e, this.state.index)} 
             onDragEnd={this.props.onDragEnd}>
         <div className="card-content">
-          <p style={{textDecoration: this.state.complete ? 'line-through' : 'none'}}>
+          <p style={{textDecoration: this.props.markedComplete ? 'line-through' : 'none'}}>
             {this.props.content}
           </p>
         </div>
         <div className="card-footer">
-          <button className="card-button" onClick={this.toggleComplete}>{this.state.complete ? "Show Active" : "Mark Complete"}</button>
+          <button className="card-button" 
+                  onClick={e => this.props.onComplete(e, this.state.index)}
+          >
+            {this.state.complete ? "Show Active" : "Mark Complete"}</button>
           <button className="card-button" onClick={()=> this.props.onRemove(this.state.index)}>Remove</button>
         </div>
       </div>
