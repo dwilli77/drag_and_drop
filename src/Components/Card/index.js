@@ -16,7 +16,11 @@ class Card extends React.Component {
 
   render(){
     return(
-      <div className="card" draggable>
+      <div className="card" 
+            draggable 
+            onDragStart={e => this.props.onDragStart(e, this.state.index)} 
+            onDragOver={e => this.props.onDragOver(e, this.state.index)} 
+            onDragEnd={this.props.onDragEnd}>
         <div className="card-content">
           <p style={{textDecoration: this.state.complete ? 'line-through' : 'none'}}>
             {this.props.content}
