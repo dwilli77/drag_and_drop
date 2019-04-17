@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import {Container} from './Components/Container'
+import TopBar from './Components/TopBar'
 import Form from './Components/Form'
 import Card from './Components/Card'
 import './App.css';
+
 
 class App extends Component {
 
   state ={
     toDo: "",
     items:[],
+    gridMode: false
   }
 
   handleInputChange = event => {
@@ -17,6 +20,11 @@ class App extends Component {
     this.setState({
       [name]: value
     });
+  };
+
+  handleSwitchChange = event => {
+    const name = event.target.name;
+    this.setState({ [name]: event.target.checked });
   };
 
   addListItem = event => {
@@ -71,9 +79,11 @@ class App extends Component {
   render() {
     return (
       <Container>
-        <Form content={this.state.toDo} name="toDo" onChange={this.handleInputChange} onClick={this.addListItem}/>
+        <TopBar onChange={this.handleSwitchChange} gridMode={this.state.gridMode} />
 
-        <div className="list-area">
+        <Form content={this.state.toDo} name="toDo" onChange={this.handleInputChange} onClick={this.addListItem} />
+
+        <div className="list-area" style={this.state.gridMode ? {display:'flex', flexWrap: 'wrap'} : null}>
           {this.state.items.map(item =>{
             let index = this.state.items.indexOf(item);
 
@@ -85,7 +95,9 @@ class App extends Component {
                           content={item[0]} 
                           markedComplete={item[1]} 
                           onRemove={this.removeItem} 
-                          onComplete={this.toggleComplete}/>
+                          onComplete={this.toggleComplete}
+                          gridMode={this.state.gridMode}
+                          />
           })}
         </div>
       </Container>

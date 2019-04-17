@@ -16,7 +16,7 @@ input{
 
 .add-button{
   margin: 0 auto 0 auto;
-  background-color: #008CBA;
+  background: #008CBA;
   padding: 7px;
   font-size: 1.5rem;
 }
